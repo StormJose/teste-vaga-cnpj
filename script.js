@@ -176,6 +176,8 @@ const renderErrorMessage = function (errorMessage) {
   // Esconde o botão de edição, visto que não há dados para serem alterados
   editBtn.classList.add("hidden");
 
+ errorMessageContainer.innerHTML = "";
+
   const markup = `<h2 class="heading-secondary error-message">
                     ${errorMessage}
                 </h2>
