@@ -7,6 +7,7 @@ const queryInputField = document.querySelector(".query-cnpj__input");
 const submitQueryBtn = document.querySelector(".submit-query--btn");
 const submitFormBtns = document.querySelectorAll('.submit--btn')
 const editBtn = document.querySelector(".btn--edit-info");
+
 const companyTabContainer = document.querySelector(".company-info__tab");
 const shareholdersTabContainer = document.querySelector(
   ".shareholders-info__tab"
@@ -15,21 +16,23 @@ const companyForm = document.querySelector(".company-form");
 const shareholdersForm = document.querySelector(
   ".shareholders-info__tab .shareholders-form"
 );
+const errorMessageContainer = document.querySelector(".error-message__box");
 
 // Tabs
 const tabBtns = document.querySelectorAll(".btn--tab");
 const tabBtnsContainer = document.querySelector(".tabs-list");
-const tabContainers = document.querySelectorAll('.tab-content')
+const tabContainers = document.querySelectorAll(".tab-content");
 
-// Filtros de Sócios 
+// Filtros de Sócios
 const filterTabContainer = document.querySelector(
   ".shareholders-filter__tab-list"
 );
 const filterBtns = document.querySelectorAll(".btn-filter");
 
-const companyName = document.getElementById('company-name')
-const companyCNPJ = document.getElementById('company-cnpj')
-const companyEmail = document.getElementById('company-email')
+// Dados da companhia
+const companyName = document.getElementById("company-name");
+const companyCNPJ = document.getElementById("company-cnpj");
+const companyEmail = document.getElementById("company-email");
 const companyDebut = document.getElementById("company-debut");
 const companyActivity = document.getElementById("company-activity");
 const companyAddress = document.getElementById("company-address");
@@ -41,150 +44,165 @@ const dateOptions = {
   day: "numeric",
 };
 
-
-
 // Formata nomes
-const formatName = ((name) => name.split(' ').map(word => word[0] + word.slice(1).toLowerCase()).join(' '))
-
+const formatName = (name) =>
+  name
+    .split(" ")
+    .map((word) => word[0] + word.slice(1).toLowerCase())
+    .join(" ");
 
 // Estado da aplicação
 let state = {
-    empresa: {},
-    quadroSocietario: []
-}
+  empresa: {},
+  quadroSocietario: [],
+};
 
+const validateCNPJ = function (cnpj) {
+  const isValid = checkCNPJ(cnpj);
 
+  if (!isValid) {
+    queryInputField.style.border = "2px solid #dc2626";
+    return false;
+  }
 
-const checkCNPJ = function(cnpj) {
-    
-    const regex = /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$/;
+  return true;
+};
 
-    return regex.test(cnpj)
-}
+const checkCNPJ = function (cnpj) {
+  const regex = /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$/;
 
-console.log(checkCNPJ('3232424'))
+  return regex.test(cnpj);
+};
 
 // Para ser inserido no URL de requisição,
 // o CNPJ precisa estar ausente de quaisquer barras (/)
 // Os demais caracteres não interferem na requisição.
-const formatCNPJ = function(cnpj) {
-    if (!cnpj.includes('/')) return cnpj
-    const slash = '/'
-    const index = cnpj.indexOf(slash)
+const formatCNPJ = function (cnpj) {
+  if (!cnpj.includes("/")) return cnpj;
+  const slash = "/";
+  const index = cnpj.indexOf(slash);
 
-    // Insere temporariamente os caractéres do cnpj em um array
-    // para permitir a formatação.
-    const tempArray = cnpj.split("")
-    tempArray.splice(index, 1)
-    const newString = tempArray.join('')
+  // Insere temporariamente os caractéres do cnpj em um array
+  // para permitir a formatação.
+  const tempArray = cnpj.split("");
+  tempArray.splice(index, 1);
+  const newString = tempArray.join("");
 
-    return newString
-}
-
-
-// Responsável pela requisição propriamente dita.
-const fetchCNPJ = async function(cnpj) {
-    try {
-
-        const res = await fetch(`${API_URL}/${cnpj}`);
-        let data = await res.json()
-        
-        // Formata o objeto de resposta da API para algo mais objetivo 
-        // e compatível com JavaScript.
-        // 1.
-        const dataQuadroSocietario = data.qsa.map(function(socio) {
-            return {
-                id: socio.cnpj_cpf_do_socio,
-                cargo: socio.qualificacao_socio,
-                nome: formatName(socio.nome_socio),
-                faixaEtaria: socio.faixa_etaria,
-                dataEntrada: socio.data_entrada_sociedade,
-            }
-        })
-        
-        state.quadroSocietario = dataQuadroSocietario;
-        
-        // 2.
-        state.empresa = {
-            cnpj,
-            email: data.email,
-            razaoSocial: data.razao_social,
-            cep: data.cep,
-            atividade: data.cnae_fiscal_descricao,
-            inicioAtividade: data.data_inicio_atividade
-            ,
-        endereço: `${data.descricao_tipo_de_logradouro} ${data.logradouro}, ${data.numero} - ${data.bairro}, ${data.municipio}, ${data.uf}`,
-        telefone: data.ddd_telefone_1
-    }
-} catch(err) {
-    console.log(err.message)
-}
-    
-}
-
-
-queryForm.addEventListener('submit', async function(e) {
-    e.preventDefault()
-
-    tabContainers.forEach((tab) => tab.classList.add('hidden'))
-    
-    const query = queryInputField.value 
-
-    // guard clause 
-    if (!query.length) return
-
-    // valida o formato do CNPJ
-    if (!checkCNPJ(query)) return
-
-    // Carregar dados da empresa (PJ)
-    await fetchCNPJ(formatCNPJ(query))
-
-    // Ativa tabs de navegação
-    activateTabs()
-
-    // Vizualização da empresa
-    renderCompanyView(state.empresa)
-
-    // Vizualização do Quadro Societário
-    renderShareholdersView(state.quadroSocietario)
-
-    // Filtros
-    renderFilterBtns(state.quadroSocietario)
-    
-    
-})
-
-const activateTabs = function () {
-
-    tabBtns.forEach((tab) => tab.classList.remove('btn--tab-active'))
-    tabBtnsContainer.style.opacity = "100";
-    tabBtnsContainer.style.pointerEvents = "all";
-    companyTabContainer.classList.remove("hidden");
-    editBtn.classList.remove("hidden");
-
+  return newString;
 };
 
+// Responsável pela requisição propriamente dita.
+const fetchCNPJ = async function (cnpj) {
+  try {
+    const res = await fetch(`${API_URL}/${cnpj}`);
+    let data = await res.json();
 
-const renderCompanyView = function(empresa) {
-    
-    // Campos de preenchimento
-    companyName.value =
+    if (data.name === "BadRequestError") {
+      state.error = "BadRequestError";
+    }
+
+    // Formata o objeto de resposta da API para algo mais objetivo
+    // e compatível com JavaScript.
+    // 1.
+    const dataQuadroSocietario = data.qsa.map(function (socio) {
+      return {
+        id: socio.cnpj_cpf_do_socio,
+        cargo: socio.qualificacao_socio,
+        nome: formatName(socio.nome_socio),
+        faixaEtaria: socio.faixa_etaria,
+        dataEntrada: socio.data_entrada_sociedade,
+      };
+    });
+
+    state.quadroSocietario = dataQuadroSocietario;
+
+    // 2.
+    state.empresa = {
+      cnpj,
+      email: data.email,
+      razaoSocial: data.razao_social,
+      cep: data.cep,
+      atividade: data.cnae_fiscal_descricao,
+      inicioAtividade: data.data_inicio_atividade,
+      endereço: `${data.descricao_tipo_de_logradouro} ${data.logradouro}, ${data.numero} - ${data.bairro}, ${data.municipio}, ${data.uf}`,
+      telefone: data.ddd_telefone_1,
+    };
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+queryForm.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  tabContainers.forEach((tab) => tab.classList.add("hidden"));
+
+  const query = queryInputField.value;
+
+  //   guard clause | valida o formato do CNPJ
+  if (!query.length || !validateCNPJ(query)) return;
+
+  // valida o formato do CNPJ
+
+  // Carregar dados da empresa (PJ)
+  await fetchCNPJ(formatCNPJ(query));
+
+  if (state.error)
+    return renderErrorMessage(
+      "O CNPJ especificado não corresponde a nenhuma empresa"
+    );
+
+  // Vizualização da empresa
+  renderCompanyView(state.empresa);
+
+  // Vizualização do Quadro Societário
+  renderShareholdersView(state.quadroSocietario);
+
+  // Filtros
+  renderFilterBtns(state.quadroSocietario);
+
+  // Ativa tabs de navegação
+  activateTabs();
+});
+
+const activateTabs = function () {
+  tabBtns.forEach((tab) => tab.classList.remove("btn--tab-active"));
+  tabBtnsContainer.style.opacity = "100";
+  tabBtnsContainer.style.pointerEvents = "all";
+  companyTabContainer.classList.remove("hidden");
+};
+
+const renderErrorMessage = function (errorMessage) {
+  // Esconde o botão de edição, visto que não há dados para serem alterados
+  editBtn.classList.add("hidden");
+
+  const markup = `<h2 class="heading-secondary error-message">
+                    ${errorMessage}
+                </h2>
+                `;
+
+  errorMessageContainer.insertAdjacentHTML("afterbegin", markup);
+};
+
+const renderCompanyView = function (empresa) {
+  // Campos de preenchimento
+  companyName.value =
     companyActivity.value =
     companyAddress.value =
     companyCNPJ.value =
     companyDebut.value =
     companyEmail.value =
     companyPhone.value =
-        "";
+      "";
 
-    companyName.value = empresa.razaoSocial;
-    companyEmail.value = empresa.email;
-    companyActivity.value = empresa.atividade;
-    companyAddress.value = empresa.endereço;
-    companyCNPJ.value = empresa.cnpj;
-    companyPhone.value = empresa.telefone;
-    companyDebut.value = empresa.inicioAtividade;
-}
+  companyName.value = empresa.razaoSocial;
+  companyEmail.value = empresa.email;
+  companyActivity.value = empresa.atividade;
+  companyAddress.value = empresa.endereço;
+  companyCNPJ.value = empresa.cnpj;
+  companyPhone.value = empresa.telefone;
+  companyDebut.value = empresa.inicioAtividade;
+};
 
 const renderShareholdersView = function(quadroSocietario) {
 
