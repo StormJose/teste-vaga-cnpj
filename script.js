@@ -65,6 +65,7 @@ const validateCNPJ = function (cnpj) {
     return false;
   }
 
+  queryInputField.style.border = "2px solid #e4e4e7";
   return true;
 };
 
@@ -97,6 +98,7 @@ const fetchCNPJ = async function (cnpj) {
     const res = await fetch(`${API_URL}/${cnpj}`);
     let data = await res.json();
 
+    console.log(data);
     if (data.name === "BadRequestError") {
       state.error = "BadRequestError";
     }
@@ -127,6 +129,8 @@ const fetchCNPJ = async function (cnpj) {
       endereço: `${data.descricao_tipo_de_logradouro} ${data.logradouro}, ${data.numero} - ${data.bairro}, ${data.municipio}, ${data.uf}`,
       telefone: data.ddd_telefone_1,
     };
+    state.error = "";
+    renderErrorMessage("");
   } catch (err) {
     console.log(err.message);
   }
@@ -147,36 +151,33 @@ queryForm.addEventListener("submit", async function (e) {
   // Carregar dados da empresa (PJ)
   await fetchCNPJ(formatCNPJ(query));
 
-  if (state.error)
-    return renderErrorMessage(
-      "O CNPJ especificado não corresponde a nenhuma empresa"
-    );
+  if (!state.error) {
+    // Vizualização da empresa
+    renderCompanyView(state.empresa);
 
-  // Vizualização da empresa
-  renderCompanyView(state.empresa);
+    // Vizualização do Quadro Societário
+    renderShareholdersView(state.quadroSocietario);
 
-  // Vizualização do Quadro Societário
-  renderShareholdersView(state.quadroSocietario);
+    // Filtros
+    renderFilterBtns(state.quadroSocietario);
 
-  // Filtros
-  renderFilterBtns(state.quadroSocietario);
-
-  // Ativa tabs de navegação
-  activateTabs();
+    // Ativa tabs de navegação
+    toggleActiveTabs();
+  } else return renderErrorMessage("O CNPJ especificado não corresponde a nenhuma empresa");
 });
 
-const activateTabs = function () {
+const toggleActiveTabs = function () {
   tabBtns.forEach((tab) => tab.classList.remove("btn--tab-active"));
   tabBtnsContainer.style.opacity = "100";
   tabBtnsContainer.style.pointerEvents = "all";
   companyTabContainer.classList.remove("hidden");
 };
 
-const renderErrorMessage = function (errorMessage) {
+const renderErrorMessage = function (errorMessage, error) {
   // Esconde o botão de edição, visto que não há dados para serem alterados
   editBtn.classList.add("hidden");
 
- errorMessageContainer.innerHTML = "";
+  errorMessageContainer.innerHTML = "";
 
   const markup = `<h2 class="heading-secondary error-message">
                     ${errorMessage}
