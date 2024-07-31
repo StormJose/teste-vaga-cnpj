@@ -1,3 +1,9 @@
+@media (max-width: 48em) {
+    .field__box {
+        flex-direction: column;
+        gap: 0;
+    }
+}
 
 /* Width = 600px */
 @media (max-width: 37.5em) {
@@ -13,10 +19,7 @@
     }
 
 
-    .field__box {
-        flex-direction: column;
-        gap: 0;
-    }
+    
 
     .field__box-content {
         gap: 0;
@@ -27,7 +30,20 @@
         font-size: 1.2rem !important;
     }
 
+    
+
     /* sócios */
+
+
+    .shareholders-filter__tab-list {
+
+        overflow-x: scroll;
+        flex-wrap: nowrap;
+        /* IOS - Scroll suave através do toque */
+        -webkit-overflow-scrolling: touch;
+        
+}
+
     .shareholder__card {
         gap: 2rem;
     }
