@@ -1,0 +1,359 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Teachers:ital,wght@0,400..800;1,400..800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --main-color: #0066ff;
+    --shade-main-color: #005ce6;
+}
+
+:focus {
+    outline: 3px solid rgba(0, 102, 255, 0.395)
+}
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+body { 
+    font-family: 'Inter', sans-serif;
+    color: #222;
+}
+
+
+.container {
+    max-width: 130rem;
+    margin: 0 auto;
+    padding: 0 2.4rem;
+}
+
+.heading--secondary {                                                                                                                        
+    font-size: 2.4rem;
+    flex: 1;
+}
+
+.heading--tertiary {
+    color: #3f3f46;
+    font-size: 1.8rem;
+}
+
+.btn {
+    cursor: pointer;
+
+    display: inline-block;
+    border: none;
+    border-radius: 7px;
+    padding: 0.8rem 1.2rem;
+    background-color: var(--main-color);
+    color: #FFF;
+    font-family: inherit;
+    font-size: 1.6rem;
+    font-weight: 600;
+
+    transition: 0.3s all;
+}
+
+.btn:hover, 
+.btn:active {
+    background-color: var(--shade-main-color);
+}
+
+/*===========================*/
+/* Campo de inserção de CNPJ */
+/*===========================*/
+
+.section--form {
+    padding-top: 9.6rem;
+}
+
+.query-form__box {
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+    height: 30vh;
+}
+
+.query-form {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.query-form input {
+
+    border-radius: 7px;
+    border: 2px solid #e4e4e7;
+    padding: 1rem 1.2rem;
+    font-family: inherit;
+    font-size: 1.6rem;
+    
+    transition: 0.3s all;
+}
+
+
+.query-form input::placeholder {
+    font-family: inherit;
+}
+
+
+ 
+.submit--btn {
+  
+    /* a mesma classe desse botão 
+    é utilizada em contextos diferentes. */
+
+    /* GRID */
+    justify-self: end;
+    /* text-align: right;*/
+
+    /* FLEX */
+    align-self: flex-end;
+
+    
+}
+
+
+
+
+.section--company {
+    padding: 6.4rem 0;
+}
+
+.tabs {
+    display: grid;
+    row-gap: 3.2rem;
+}
+
+.tabs-list {
+    z-index: 1000;
+    
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    width: 100%;
+    list-style: none;
+    padding: 2.4rem 1.2rem;
+    display: flex;
+    gap: 1.8rem;
+
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.btn--tab {
+    cursor: pointer;
+    background-color: #FFF;
+    padding: 0.4rem;
+    border: none;
+    border-bottom: 2.15px solid transparent;
+    border-radius: 1px;
+    font-family: inherit;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.btn--tab:focus {
+    outline: none;
+}
+
+.btn--tab-active {
+    border: none;
+    border-bottom: 2.15px solid var(--main-color);
+}
+
+
+.btn--edit-info {
+    display: flex;
+    align-items: center;
+    
+    /* em relação ao elemento pai */
+    justify-self: flex-start;
+    align-self: flex-start;    
+    
+    gap: 0.8rem;
+   text-decoration: none;
+}
+
+.edit-icon {
+    width: 20px;
+    height: 20px;
+}
+
+
+/*================================*/
+/* Informações da Pessoa Jurídica */
+/*================================*/
+
+.company-info__tab {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.company-form {
+    border-radius: 11px;
+    border: 1.75px solid #e4e4e7;
+    padding: 2.4rem 1.2rem;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3.2rem;
+}
+
+.field__box {
+    border-bottom: 1.55px solid #f4f4f5;
+    padding-bottom: 1.8rem;
+    display: flex;
+    gap: 2.4rem;
+}
+
+.field__label {
+    font-size: 1.2rem;
+}
+
+.field__box-content {
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3.2rem;
+}
+
+.field-activity {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.field__box-separator {
+    display: flex;
+    flex-direction: column;
+}
+
+.field__box-content input, 
+.secondary-activities__list input,
+.field__box-content textarea {
+    pointer-events: none;
+
+    border: none ;
+    font-family: inherit;
+    border-radius: 7px;
+    min-width: fit-content;
+    flex-grow: 1;
+    font-size: 1.6rem;
+}
+
+.field-input--active {
+
+    pointer-events: all !important;
+
+    border: 1.55px solid #a1a1aa !important;
+    padding: 1.2rem;    
+    margin-top: 0.8rem;
+}
+
+/*============*======*/
+/* Quadro Societário */
+/*===================*/
+
+
+
+.shareholders-form {
+    display: grid;
+    row-gap: 2.4rem;
+}
+
+
+/* Filtro de Quadro Societário */
+
+.shareholders-filter__tab-list {
+     z-index: 1000;
+    
+    position: sticky;
+    top: 8%;
+    background-color: #fff;
+    width: 100%;
+
+    padding: 2rem 0;
+    list-style: none;
+    display: flex;
+    gap: 1.2rem;
+
+}
+
+.btn-filter {
+
+    cursor: pointer; 
+
+    background-color: #FFF;
+    border-radius: 7px;
+    border: 2px solid var(--shade-main-color);
+    padding: 0.8rem 1.2rem;
+    font-family: inherit;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--shade-main-color);
+}
+
+.btn-filter--active {
+    background-color: var(--shade-main-color);
+    color: #FFF;
+}
+
+.shareholder__card {
+    border-radius: 11px;
+    background-color: #f4f4f5;
+    padding: 2.4rem 1.2rem;
+}
+
+.shareholder__card input {
+    background-color: #f4f4f5;
+    
+}
+
+
+
+/* Estilização específica de campos */
+
+/* Nome / Razão Social */
+#company-name {
+    font-size: 2rem;
+    font-weight: 600;
+    color: inherit;
+}
+
+.company-cnpj-cpf {
+    color: #a1a1aa;
+}
+
+/* Início das atividades */
+#company-debut {
+    font-size: 1.3rem;
+}
+
+/* atividades PJ */
+#company-activity {
+}
+
+
+
+/* Cargo do sócio */
+.shareholder-occupation {
+    color: var(--main-color);
+    font-weight: 600;
+    
+}
+
+
+/*================*/
+/* HELPER CLASSES */
+/*================*/
+
+.hidden {
+    display: none;
+}

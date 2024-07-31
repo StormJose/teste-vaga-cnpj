@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Styles -->
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./queries.css">
+
+    <title>CNPJ - Consulte e edite informações rapidamente</title>
+</head>
+<body>
+    
+    <section class="section--form">
+        <div class="query-form__box">
+            <form class="query-form">
+                <input class="query-cnpj__input" type="text" value="33.453.598/0001-23" placeholder=" XX. XXX. XXX/0001-XX" >
+                <button class="btn submit-query--btn" type="submit">Consultar</button>
+            </form>
+        </div>
+       
+    </section>
+    <section class="section--company">
+        <div class="tabs container">
+            <ul class="tabs-list">
+                <li>
+                    <button class="btn--tab btn--tab-active" data-tab="company">Empresa</button>
+                </li>
+                <li>
+                    <button class="btn--tab" data-tab="shareholders">Sócios</button>
+                </li>
+            </ul>
+            <a class="btn btn--edit-info hidden" href="#"> 
+            <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+            </svg>
+            Editar</a>
+
+            <div class="tab-content company-info__tab hidden" id="company">
+                <form class="company-form">
+
+                    <div class="field__box">
+                        <h2 class="heading--secondary">Razão Social</h2>
+
+                        <div class="field__box-content">
+                            <div class="field__box-separator">
+                                <input class="input-field" id="company-name" name="company-name" type="text" required>
+                                <input class="input-field company-cnpj-cpf" id="company-cnpj" name="company-cnpj" type="text" required>
+                            </div>
+                            <div class="field__box-separator">
+                                <input class="input-field" id="company-email" name="company-email" type="text" required>
+                            </div>
+                        </div>
+                            
+                    </div>
+                    <div class="field__box">
+                                <h2 class="heading--secondary">Informações gerais</h2>
+                                <div class="field__box-content">
+                                    <div class="field__box-separator">
+                                        <h3 class="heading--tertiary">Atividades</h3>
+                                        <div class="field-activity">
+                                            <label class="field__label">Desde:</label>
+                                            <input class="input-field" id="company-debut" name="company-debut" type="date" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="field__box-separator">
+                                        <textarea class="input-field" id="company-activity" name="company-activity" rows="3" required></textarea>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                    
+                    <div class="field__box">
+                        <h2 class="heading--secondary">Endereço e contato</h2>
+                        <div class="field__box-content">
+                            <div class="field__box-separator">
+                                <h3 class="heading--tertiary">Endereço</h3>
+                                
+                                <textarea class="input-field" id="company-address" name="company-address" rows="3" required></textarea>
+                            </div>
+                            <div class="field__box-content">
+                                <h3 class="heading--tertiary">Telefones</h3>
+                               
+                                    <input class="input-field" id="company-phone" name="company-phone" type="text" value="1934238000" required>
+                                    <input class="input-field" type="text" value="1934238000">
+            
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn submit--btn hidden">Confirmar</button>
+                </form> 
+    
+            </div>
+            <!-- Tab - Quadro Societário -->
+            <div class="tab-content shareholders-info__tab hidden" id="shareholders">
+                <ul class="shareholders-filter__tab-list">
+                   <li>
+                    <button class="btn-filter btn-filter--active">Todos</button>
+                   </li>
+                </ul>
+                <form class="shareholders-form">
+                    <!-- Card - Sócio -->
+                    <div class="shareholder__card field__box">
+                        <div class="field__box-content">
+                            <div class="field__box-separator">
+                                <input class="input-field shareholder-occupation" type="text" value="DIRETOR">
+                                <input class="input-field shareholder-name" type="text" value="Frederico Barbosa Saliba">
+                            </div>
+                        <div class="field__box-separator">
+                            <label class="field__label">Desde:</label>
+                            <input class="input-field" type="text" value="24 de Novembro de 2020">
+                        </div>
+                    </div>
+                    <div class="field__box-content">
+                        <div class="field__box-separator">
+                            <input class="input-field shareholder-name" type="text" value="Entre 41 a 50 anos">     
+                            <input class="input-field company-cnpj-cpf" type="text" value="***270246**">
+                        </div>
+                    
+                    </div>
+                </div>
+                <!-- Fim do Card -->
+                 <button class="btn submit--btn hidden">Confirmar</button>
+            </form>
+            <!-- <button class="btn submit--btn">Confirmar</button> -->
+            </div>
+        </div>
+    </section>
+    <footer></footer>
+
+
+    <script src="./script.js"></script>
+</body>
+</html>

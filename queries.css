@@ -1,0 +1,39 @@
+
+/* Width = 600px */
+@media (max-width: 37.5em) {
+
+
+    .heading--secondary {                                                                                                                        
+        font-size: 2rem;
+    }
+
+    .heading--tertiary {
+       
+        font-size: 1.4rem;
+    }
+
+
+    .field__box {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .field__box-content {
+        gap: 0;
+    }
+
+
+    .input-field {
+        font-size: 1.2rem !important;
+    }
+
+    /* sócios */
+    .shareholder__card {
+        gap: 2rem;
+    }
+
+    .shareholder__card .field__box-content {
+        gap: 2rem;
+    }
+
+}
