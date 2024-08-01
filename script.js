@@ -55,17 +55,20 @@ const formatName = (name) =>
 let state = {
   empresa: {},
   quadroSocietario: [],
+  error: null,
 };
 
 const validateCNPJ = function (cnpj) {
-  const isValid = checkCNPJ(cnpj);
+  const isValid = checkCNPJ(cnpj) && queryInputField.value;
 
   if (!isValid) {
     queryInputField.style.border = "2px solid #dc2626";
+    state.error = "badQueryError";
     return false;
   }
 
   queryInputField.style.border = "2px solid #e4e4e7";
+  state.error = null;
   return true;
 };
 
@@ -133,6 +136,7 @@ const fetchCNPJ = async function (cnpj) {
     renderErrorMessage("");
   } catch (err) {
     console.log(err.message);
+    state.error = "fetchError";
   }
 };
 
@@ -144,50 +148,66 @@ queryForm.addEventListener("submit", async function (e) {
   const query = queryInputField.value;
 
   //   guard clause | valida o formato do CNPJ
-  if (!query.length || !validateCNPJ(query)) return;
-
-  // valida o formato do CNPJ
+  if (!validateCNPJ(query)) {
+    renderErrorMessage("Formato de CNPJ incorreto");
+    toggleActiveTabs(state.error);
+    return;
+  }
 
   // Carregar dados da empresa (PJ)
   await fetchCNPJ(formatCNPJ(query));
 
-  if (!state.error) {
-    // Vizualização da empresa
-    renderCompanyView(state.empresa);
+  if (state.error) {
+    renderErrorMessage("O CNPJ especificado não corresponde a nenhuma empresa");
+    toggleActiveTabs(state.error);
+    return;
+  }
 
-    // Vizualização do Quadro Societário
-    renderShareholdersView(state.quadroSocietario);
+  // Vizualização da empresa
+  renderCompanyView(state.empresa);
 
-    // Filtros
-    renderFilterBtns(state.quadroSocietario);
+  // Vizualização do Quadro Societário
+  renderShareholdersView(state.quadroSocietario);
 
-    // Ativa tabs de navegação
-    toggleActiveTabs();
-  } else return renderErrorMessage("O CNPJ especificado não corresponde a nenhuma empresa");
+  // Filtros
+  renderFilterBtns(state.quadroSocietario);
+
+  // Ativa tabs de navegação
+  toggleActiveTabs(state.error);
 });
 
-const toggleActiveTabs = function () {
-  tabBtns.forEach((tab) => tab.classList.remove("btn--tab-active"));
-  tabBtnsContainer.style.opacity = "100";
-  tabBtnsContainer.style.pointerEvents = "all";
-  companyTabContainer.classList.remove("hidden");
+const toggleActiveTabs = function (error) {
+  console.log(error);
+  if (!error) {
+    tabBtns.forEach((tab) => tab.classList.remove("btn--tab-active"));
+    tabBtnsContainer.style.opacity = "100";
+    tabBtnsContainer.style.pointerEvents = "all";
+    companyTabContainer.classList.remove("hidden");
+  } else {
+    tabBtnsContainer.style.opacity = "0.5";
+    tabBtnsContainer.style.pointerEvents = "none";
+    companyTabContainer.classList.add("hidden");
+  }
 };
 
-const renderErrorMessage = function (errorMessage, error) {
+const renderErrorMessage = function (errorMessage) {
   // Esconde o botão de edição, visto que não há dados para serem alterados
+
   editBtn.classList.add("hidden");
 
   errorMessageContainer.innerHTML = "";
 
   const markup = `<h2 class="heading-secondary error-message">
-                    ${errorMessage}
-                </h2>
-                `;
+  ${errorMessage}
+  </h2>
+  `;
 
   errorMessageContainer.insertAdjacentHTML("afterbegin", markup);
 };
 
 const renderCompanyView = function (empresa) {
+  editBtn.classList.remove("hidden");
+
   // Campos de preenchimento
   companyName.value =
     companyActivity.value =
